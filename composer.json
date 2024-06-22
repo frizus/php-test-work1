@@ -25,8 +25,12 @@
         "psr-4": {
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
-            "Database\\Seeders\\": "database/seeders/"
-        }
+            "Database\\Seeders\\": "database/seeders/",
+            "League\\Flysystem\\UnixVisibility\\": "fixes/League/Flysystem/UnixVisibility/"
+        },
+        "exclude-from-classmap": [
+            "vendor/league/flysystem/src/UnixVisibility/PortableVisibilityConverter.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

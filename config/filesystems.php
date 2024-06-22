@@ -29,6 +29,16 @@ return [
     */
 
     'default_dir_permissions' => 0775,
+    'default_permissions' => [
+        'file' => [
+            'public' => 0664,
+            'private' => 0660,
+        ],
+        'dir' => [
+            'public' => 0775,
+            'private' => 0770,
+        ]
+    ],
 
     'disks' => [
 
