@@ -28,12 +28,40 @@ return [
     |
     */
 
+    'default_dir_permissions' => 0775,
+
     'disks' => [
+
+        'root' => [
+            'driver' => 'local',
+            'root' => base_path(),
+            'throw' => false,
+            'permissions' => [
+                'file' => [
+                    'public' => 0664,
+                    'private' => 0660,
+                ],
+                'dir' => [
+                    'public' => 0775,
+                    'private' => 0770,
+                ]
+            ]
+        ],
 
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),
             'throw' => false,
+            'permissions' => [
+                'file' => [
+                    'public' => 0664,
+                    'private' => 0660,
+                ],
+                'dir' => [
+                    'public' => 0775,
+                    'private' => 0770,
+                ]
+            ]
         ],
 
         'public' => [
@@ -42,6 +70,16 @@ return [
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
             'throw' => false,
+            'permissions' => [
+                'file' => [
+                    'public' => 0664,
+                    'private' => 0660,
+                ],
+                'dir' => [
+                    'public' => 0775,
+                    'private' => 0770,
+                ]
+            ]
         ],
 
         's3' => [
