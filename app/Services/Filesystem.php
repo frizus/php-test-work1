@@ -8,15 +8,10 @@ class Filesystem extends \Illuminate\Filesystem\Filesystem
 
     /**
      * @param $mode
-     * @param $swap
      * @return int
      */
-    private function swapMode($mode, $swap): int
+    private function swapMode($mode): int
     {
-        if (!$swap) {
-            return $mode;
-        }
-
         $defaultDirPermissions = config('filesystems.default_dir_permissions', self::LARAVEL_FILESYSTEM_DIR_PERMISSIONS);
 
         if ($mode !== $defaultDirPermissions) {
@@ -31,7 +26,7 @@ class Filesystem extends \Illuminate\Filesystem\Filesystem
      */
     public function ensureDirectoryExists($path, $mode = self::LARAVEL_FILESYSTEM_DIR_PERMISSIONS, $recursive = true)
     {
-        parent::ensureDirectoryExists($path, $this->swapMode($mode, func_num_args() < 2), $recursive);
+        parent::ensureDirectoryExists($path, $this->swapMode($mode), $recursive);
     }
 
     /**
@@ -39,6 +34,6 @@ class Filesystem extends \Illuminate\Filesystem\Filesystem
      */
     public function makeDirectory($path, $mode = self::LARAVEL_FILESYSTEM_DIR_PERMISSIONS, $recursive = false, $force = false)
     {
-        return parent::makeDirectory($path, $this->swapMode($mode, func_num_args() < 2), $recursive, $force);
+        return parent::makeDirectory($path, $this->swapMode($mode), $recursive, $force);
     }
 }
