@@ -9,7 +9,10 @@ install-composer-scripts:
 	composer run-script post-update-cmd # возможно, закомментировать
 	composer run-script post-create-project-cmd
 
-install: install-libs install-composer-scripts
+create-files-link:
+	php artisan storage:link
+
+install: install-libs install-composer-scripts create-files-link
 
 setup: install
 
