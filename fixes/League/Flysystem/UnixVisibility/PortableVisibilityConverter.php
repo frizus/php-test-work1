@@ -34,12 +34,25 @@ class PortableVisibilityConverter extends \League\Flysystem\UnixVisibility\OLD_P
     private const LARAVEL_DIRECTORY_PRIVATE = 0700;
 
     public function __construct(
-        private int $filePublic = 0644,
-        private int $filePrivate = 0600,
-        private int $directoryPublic = 0755,
-        private int $directoryPrivate = 0700,
+        private int $filePublic = self::LARAVEL_FILE_PUBLIC,
+        private int $filePrivate = self::LARAVEL_FILE_PRIVATE,
+        private int $directoryPublic = self::LARAVEL_DIRECTORY_PUBLIC,
+        private int $directoryPrivate = self::LARAVEL_DIRECTORY_PRIVATE,
         private string $defaultForDirectories = Visibility::PRIVATE
     ) {
+        $this->swapMode();
+
+        parent::__construct(
+            $this->filePublic,
+            $this->filePrivate,
+            $this->directoryPublic,
+            $this->directoryPrivate,
+            $this->defaultForDirectories
+        );
+    }
+
+    private function swapMode()
+    {
         if ($this->filePublic === self::LARAVEL_FILE_PUBLIC) {
             $this->filePublic = config('filesystems.default_permissions.file.public', self::LARAVEL_FILE_PUBLIC);
         }
@@ -52,13 +65,5 @@ class PortableVisibilityConverter extends \League\Flysystem\UnixVisibility\OLD_P
         if ($this->directoryPrivate === self::LARAVEL_DIRECTORY_PRIVATE) {
             $this->directoryPrivate = config('filesystems.default_permissions.dir.private', self::LARAVEL_DIRECTORY_PRIVATE);
         }
-
-        parent::__construct(
-            $this->filePublic,
-            $this->filePrivate,
-            $this->directoryPublic,
-            $this->directoryPrivate,
-            $this->defaultForDirectories
-        );
     }
 }
