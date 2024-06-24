@@ -31,7 +31,14 @@ class TaskListResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('name'),
+                Tables\Columns\TextColumn::make('')
+                    ->label('Задач')
+                    ->state(
+                        static function (TaskList $record): string {
+                            return $record->taskListTasks()->count();
+                        }
+                    )
             ])
             ->filters([
                 //

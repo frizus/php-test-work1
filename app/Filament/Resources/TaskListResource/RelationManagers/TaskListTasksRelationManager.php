@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\TaskListResource\RelationManagers;
 
+use App\Models\Tag;
 use App\Models\TaskListTask;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -9,8 +10,6 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\Arr;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class TaskListTasksRelationManager extends RelationManager
@@ -24,10 +23,11 @@ class TaskListTasksRelationManager extends RelationManager
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('sort')
-                    ->default(fn() => TaskListTask::nextSort() ?? 0),
                 Forms\Components\SpatieMediaLibraryFileUpload::make('image')
-                    ->collection('task_list_task')
+                    ->collection('task_list_task'),
+                Forms\Components\SpatieTagsInput::make('tags')
+                    ->type(Tag::taskListTasksTypeOfUser())
+
             ]);
     }
 
@@ -37,7 +37,8 @@ class TaskListTasksRelationManager extends RelationManager
             ->modifyQueryUsing(fn (Builder $query) => $query->ofUser())
             ->recordTitleAttribute('name')
             ->columns([
-                Tables\Columns\TextColumn::make('sort'),
+                Tables\Columns\TextColumn::make('sort')
+                    ->sortable(),
                 Tables\Columns\SpatieMediaLibraryImageColumn::make('image')
                     ->collection('task_list_task')
                     ->conversion('preview')
@@ -48,15 +49,28 @@ class TaskListTasksRelationManager extends RelationManager
                         $media = $record->getRelationValue('media')?->first;
                         return $media?->getUrl()?->original_url;
                     }, true),
-                Tables\Columns\TextColumn::make('name'),
+                Tables\Columns\TextColumn::make('name')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\SpatieTagsColumn::make('tags')
+                    ->type(Tag::taskListTasksTypeOfUser())
             ])
             ->filters([
-                //
+                // https://v2.filamentphp.com/tricks/filter-by-multiple-spatie-tags
+                Tables\Filters\SelectFilter::make('tags')
+                    ->multiple()
+                    ->options(Tag::getWithType(Tag::taskListTasksTypeOfUser())->pluck('name', 'name'))
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query->when($data['values'], function (Builder $query, $data): Builder {
+                            return $query->withAnyTags(array_values($data), Tag::taskListTasksTypeOfUser());
+                        });
+                    })
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make()
                     ->mutateFormDataUsing(function (array $data): array {
                         $data['user_id'] = auth()->id();
+                        $data['sort'] = TaskListTask::nextSort();
 
                         return $data;
                     }),
