@@ -40,7 +40,7 @@ make test # запускает тесты (но тестов нет)
    * Создание тегов, поиск по тегам [filament/spatie-laravel-tags-plugin](https://filamentphp.com/plugins/filament-spatie-tags)
    * Разграничение прав пользователей на просмотр своих сущностей [althinect/filament-spatie-roles-permissions](https://github.com/Althinect/filament-spatie-roles-permissions)
 3. Полировка, сидер, тесты (не будет, погружаться в livewire/filament, чтобы делать Feature-тесты
-проверки прав слишком долго), линтер, настройка воркфлоу (нечего тестировать - не будет) - 2.4 часа
+проверки прав слишком долго), линтер (не делал), настройка воркфлоу (нечего тестировать - не будет) - 2.4 часа
 
 # Известные баги
 [Filament Spatie Media Library Plugin](https://github.com/filamentphp/spatie-laravel-media-library-plugin) не удаляет
