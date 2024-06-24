@@ -26,7 +26,7 @@ git clone -b for-php-test-work1 https://github.com/frizus/phpdocker.git php-test
 Если есть своя среда:
 ```sh
 make install
-make test # запускает тесты
+make test # запускает тесты (но тестов нет)
 ```
 
 # Заняло времени
