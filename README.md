@@ -5,8 +5,6 @@
 
 Пользователь может создавать список задач, туда вносить задачи (состоящие из названия, картинки, тегов)
 
-Сделал дополнительно тесты, воркфлоу
-
 На отсутствие перевода не обращал внимания. Доп. задачи не делал
 
 ## Системные требования
@@ -41,8 +39,9 @@ make test # запускает тесты
    * Загрузка картинок [filament/spatie-laravel-media-library-plugin](https://github.com/filamentphp/spatie-laravel-media-library-plugin)
    * Создание тегов, поиск по тегам [filament/spatie-laravel-tags-plugin](https://filamentphp.com/plugins/filament-spatie-tags)
    * Разграничение прав пользователей на просмотр своих сущностей [althinect/filament-spatie-roles-permissions](https://github.com/Althinect/filament-spatie-roles-permissions)
-3. Полировка, сидер, тесты, линтер, настройка воркфлоу - 2 часа (в процессе)
+3. Полировка, сидер, тесты (не будет, погружаться в livewire/filament, чтобы делать Feature-тесты
+проверки прав слишком долго), линтер, настройка воркфлоу (нечего тестировать - не будет) - 2.4 часа
 
 # Известные баги
 [Filament Spatie Media Library Plugin](https://github.com/filamentphp/spatie-laravel-media-library-plugin) не удаляет
-отдельные папки для картинок задачи, когда задача удаляется
+отдельные папки, созданные для картинок задачи, когда задача удаляется

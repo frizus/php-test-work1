@@ -24,6 +24,9 @@ db-seed:
 reset-db:
 	php artisan migrate:refresh
 
+test:
+	php artisan test
+
 rerun-db: reset-db regenerate-permissions db-seed
 
 install: install-libs install-composer-scripts generate-permissions create-files-link db-seed
@@ -33,3 +36,5 @@ setup: install
 build: install
 
 compile: install
+
+.PHONY: test
