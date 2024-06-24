@@ -17,28 +17,31 @@ class TaskListResource extends Resource
 {
     protected static ?string $model = TaskList::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-briefcase';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
+                    ->required()
             ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(function (Builder $query): Builder {
+                return $query->withCount('taskListTasks');
+            })
             ->columns([
-                Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\TextColumn::make('')
-                    ->label('Задач')
-                    ->state(
-                        static function (TaskList $record): string {
-                            return $record->taskListTasks()->count();
-                        }
-                    )
+                Tables\Columns\TextColumn::make('id')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('name')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('task_list_tasks_count')
+                    ->sortable()
             ])
             ->filters([
                 //

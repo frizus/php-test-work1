@@ -24,7 +24,7 @@ class TaskListTasksRelationManager extends RelationManager
                     ->required()
                     ->maxLength(255),
                 Forms\Components\SpatieMediaLibraryFileUpload::make('image')
-                    ->collection('task_list_task'),
+                    ->collection(TaskListTask::MEDIA_COLLECTION),
                 Forms\Components\SpatieTagsInput::make('tags')
                     ->type(Tag::taskListTasksTypeOfUser())
 
@@ -37,10 +37,12 @@ class TaskListTasksRelationManager extends RelationManager
             ->modifyQueryUsing(fn (Builder $query) => $query->ofUser())
             ->recordTitleAttribute('name')
             ->columns([
+                Tables\Columns\TextColumn::make('id')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('sort')
                     ->sortable(),
                 Tables\Columns\SpatieMediaLibraryImageColumn::make('image')
-                    ->collection('task_list_task')
+                    ->collection(TaskListTask::MEDIA_COLLECTION)
                     ->conversion('preview')
                     ->width(150)
                     ->height('auto')

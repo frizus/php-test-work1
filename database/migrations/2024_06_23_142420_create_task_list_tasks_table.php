@@ -17,7 +17,6 @@ return new class extends Migration
             $table->foreignId('task_list_id');
             $table->integer('sort');
             $table->string('name');
-            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

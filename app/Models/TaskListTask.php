@@ -24,6 +24,8 @@ class TaskListTask extends Model implements HasMedia
         'image',
     ];
 
+    public const MEDIA_COLLECTION = 'task_list_task';
+
     public function taskList(): BelongsTo
     {
         return $this->belongsTo(TaskList::class);

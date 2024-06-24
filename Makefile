@@ -12,7 +12,10 @@ install-composer-scripts:
 create-files-link:
 	php artisan storage:link
 
-install: install-libs install-composer-scripts create-files-link
+db-seed:
+	php artisan db:seed
+
+install: install-libs install-composer-scripts create-files-link db-seed
 
 setup: install
 
