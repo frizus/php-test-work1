@@ -34,7 +34,8 @@ class TaskListTasksRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn (Builder $query) => $query->ofUser())
+            // костыль
+            ->modifyQueryUsing(fn (Builder $query) => auth()->user()->isSuperAdmin() ? $query : $query->ofUser())
             ->recordTitleAttribute('name')
             ->columns([
                 Tables\Columns\TextColumn::make('id')

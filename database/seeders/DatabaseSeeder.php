@@ -8,6 +8,7 @@ use App\Models\TaskListTask;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,23 +17,69 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $superAdminRoleId = Role::create([
+            'name' => 'Super Admin',
+            'guard_name' => 'web',
+        ])->id;
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => '123456'
+        $simpleRole = Role::create([
+            'name' => 'User',
+            'guard_name' => 'web',
         ]);
 
-        User::factory()->create([
+        $simpleRole->givePermissionTo([
+            'view-any TaskList',
+            'view TaskList',
+            'create TaskList',
+            'update TaskList',
+            'delete TaskList',
+            'force-delete TaskList',
+            'view-any TaskListTask',
+            'view TaskListTask',
+            'create TaskListTask',
+            'update TaskListTask',
+            'delete TaskListTask',
+            'force-delete TaskListTask',
+            'reorder TaskListTask',
+        ]);
+
+        $simpleRoleId = $simpleRole->id;
+
+        $superUser = User::factory()
+            ->create([
+                'name' => 'Admin',
+                'email' => 'admin@example.com',
+                'password' => '123456',
+            ]);
+
+        $superUser->assignRole($superAdminRoleId);
+
+        $userIds = [];
+
+        $simpleUser = User::factory()
+            ->create([
+                'name' => 'Test User',
+                'email' => 'test@example.com',
+                'password' => '123456',
+            ]);
+
+        $simpleUser->assignRole($simpleRoleId);
+
+        $userIds[] = $simpleUser->id;
+
+        $simpleUser = User::factory()->create([
             'name' => 'Test User 2',
             'email' => 'test2@example.com',
-            'password' => '123456'
+            'password' => '123456',
         ]);
+
+        $simpleUser->assignRole($simpleRoleId);
+
+        $userIds[] = $simpleUser->id;
 
         TaskList::factory(4)
             ->state(new Sequence(
-                ...(User::all(['id'])->pluck('id')->map(fn($value) => ['user_id' => $value])->toArray())
+                ...(collect($userIds)->map(fn($value) => ['user_id' => $value])->toArray())
             ))
             ->create()
             ->each(function(TaskList $taskList) {

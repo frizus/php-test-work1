@@ -33,13 +33,14 @@ make test # запускает тесты
 
 # Заняло времени
 1. Установка php 8.3.8, nginx, nodejs на Docker, настройка xdebug, Laravel 11 - 11.2 часов
-2. Настройка админки (Filament) - 6.5 часов
+2. Настройка админки (Filament) - 9.5 часов
    * Регистрация, авторизация пользователей (встроено)
    * Миграции для списка задач, задач
    * CRUD для списка задач (встроены задачи)
    * Поиск по названию задачи
-   * Загрузка картинок
-   * Создание тегов, поиск по тегам
+   * Загрузка картинок [filament/spatie-laravel-media-library-plugin](https://github.com/filamentphp/spatie-laravel-media-library-plugin)
+   * Создание тегов, поиск по тегам [filament/spatie-laravel-tags-plugin](https://filamentphp.com/plugins/filament-spatie-tags)
+   * Разграничение прав пользователей на просмотр своих сущностей [althinect/filament-spatie-roles-permissions](https://github.com/Althinect/filament-spatie-roles-permissions)
 3. Полировка, сидер, тесты, линтер, настройка воркфлоу - 2 часа (в процессе)
 
 # Известные баги

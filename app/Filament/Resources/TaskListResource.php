@@ -11,7 +11,6 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class TaskListResource extends Resource
 {
@@ -37,6 +36,9 @@ class TaskListResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('id')
                     ->sortable(),
+                // костыль
+                Tables\Columns\TextColumn::make('user.email')
+                    ->visible(auth()->user()->isSuperAdmin()),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
@@ -72,8 +74,15 @@ class TaskListResource extends Resource
         ];
     }
 
+    // костыль
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->ofUser();
+        $query = parent::getEloquentQuery();
+
+        if (auth()->user()->isSuperAdmin()) {
+            return $query;
+        }
+
+        return $query->ofUser();
     }
 }

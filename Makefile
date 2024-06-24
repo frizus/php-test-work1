@@ -12,10 +12,21 @@ install-composer-scripts:
 create-files-link:
 	php artisan storage:link
 
+generate-permissions:
+	 php artisan permissions:sync -Y
+
+regenerate-permissions:
+	php artisan permissions:sync -CY
+
 db-seed:
 	php artisan db:seed
 
-install: install-libs install-composer-scripts create-files-link db-seed
+reset-db:
+	php artisan migrate:refresh
+
+rerun-db: reset-db regenerate-permissions db-seed
+
+install: install-libs install-composer-scripts generate-permissions create-files-link db-seed
 
 setup: install
 
